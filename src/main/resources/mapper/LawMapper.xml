@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geminit.dao.LawDao">
+    <resultMap id="BaseMap" type="com.geminit.entity.Law">
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getLaws" resultMap="BaseMap">
+        SELECT
+        *
+        FROM law
+        ORDER BY time DESC
+        limit 0,20
+    </select>
+
+    <select id="getLatestLaw" resultMap="BaseMap">
+        SELECT
+        *
+        FROM law
+        ORDER BY time DESC
+        limit 0,1
+    </select>
+
+    <insert id="insertLaws">
+        INSERT INTO law
+        (title, time, content)
+        VALUES
+        (#{title}, #{time}, #{content})
+    </insert>
+
+</mapper>

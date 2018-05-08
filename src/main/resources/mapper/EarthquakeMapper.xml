@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geminit.dao.EarthquakeDao">
+    <resultMap id="BaseMap" type="com.geminit.entity.Earthquake">
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="getEarthquakeInfo" resultMap="BaseMap">
+        SELECT
+        *
+        FROM earthquake
+        ORDER BY time DESC
+        limit 0,10
+    </select>
+
+    <select id="getLatestEarthquake" resultMap="BaseMap">
+        SELECT
+        *
+        FROM earthquake
+        ORDER BY time DESC
+        limit 0,1
+    </select>
+
+    <insert id="insertEarthquakeInfo">
+        INSERT INTO earthquake
+        (name, lng, lat, time)
+        VALUES
+        (#{name}, #{lng}, #{lat}, #{time})
+    </insert>
+
+</mapper>
