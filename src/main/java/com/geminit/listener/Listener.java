@@ -40,6 +40,16 @@ public class Listener implements ServletContextListener,
             }
         }, new Date(), schedulePeriod);
 
+        long earthquakeSchedulePeriod = 1 * 1 * 60 * 1000; // h * m * s * ms
+        Timer earthquakeTimer = new Timer();
+        earthquakeTimer.schedule(new TimerTask(){
+            @Override
+            public void run() {
+                // todo auto-generated method stub
+                //执行你的任务类
+            }
+        }, new Date(), earthquakeSchedulePeriod);
+
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

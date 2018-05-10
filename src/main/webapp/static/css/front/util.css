@@ -1,0 +1,21 @@
+body {
+    background-color: #E6E6E6;
+}
+
+.block {
+    margin-top: 20px;
+    background-color: white;
+}
+
+.title {
+    height: 40px;
+    background-color: #4F94CD;
+}
+
+h4 {
+    color: #234577;
+}
+
+h5 {
+    margin-left: 15px;
+}

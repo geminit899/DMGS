@@ -10,6 +10,8 @@ public interface ListenerService {
 
     void updateTemperature();
 
+    void updatePM2_5();
+
     void updateEarthquakeInfo();
 
     void updateNews();

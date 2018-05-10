@@ -8,12 +8,26 @@
         <result column="content" property="content" jdbcType="VARCHAR" />
     </resultMap>
 
+    <select id="getTotalLawNum" resultType="Integer">
+        SELECT
+        COUNT(id)
+        FROM law
+    </select>
+
     <select id="getLaws" resultMap="BaseMap">
         SELECT
         *
         FROM law
         ORDER BY time DESC
-        limit 0,20
+        limit #{start},#{num}
+    </select>
+
+    <select id="getLawById" resultMap="BaseMap">
+        SELECT
+        *
+        FROM law
+        WHERE
+        id=#{id}
     </select>
 
     <select id="getLatestLaw" resultMap="BaseMap">
@@ -24,11 +38,26 @@
         limit 0,1
     </select>
 
+    <update id="updateLaw">
+        UPDATE
+        news
+        SET
+        title=#{title}, content=#{content}, time=#{time}
+        WHERE
+        id=#{id}
+    </update>
+
     <insert id="insertLaws">
         INSERT INTO law
         (title, time, content)
         VALUES
         (#{title}, #{time}, #{content})
     </insert>
+
+    <delete id="deleteLawById">
+        DELETE
+        FROM law
+        WHERE id=#{id}
+    </delete>
 
 </mapper>

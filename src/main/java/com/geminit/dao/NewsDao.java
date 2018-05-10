@@ -15,10 +15,18 @@ import java.util.List;
 @Repository
 public interface NewsDao {
 
-    List<News> getNews();
+    int getTotalNewsNum();
+
+    List<News> getNews(@Param("start")int start, @Param("num")int num);
+
+    News getNewsById(String id);
 
     News getLatestNews();
 
+    void updateNews(@Param("id")String id, @Param("title")String title, @Param("time")String time, @Param("content")String content);
+
     void insertNews(@Param("title")String title, @Param("time")String time, @Param("content")String content);
+
+    void deleteNewsById(String id);
 
 }

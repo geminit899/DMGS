@@ -15,11 +15,11 @@ import java.util.List;
 @Repository
 public interface EarthquakeDao {
 
-    List<Earthquake> getEarthquakeInfo();
+    List<Earthquake> getEarthquakeInfo(@Param("start")int start, @Param("num")int num);
 
     Earthquake getLatestEarthquake();
 
     void insertEarthquakeInfo(@Param("name")String name, @Param("lng")String lng, @Param("lat")String lat,
-                              @Param("time")String time);
+                              @Param("degree")String degree, @Param("time")String time);
 
 }

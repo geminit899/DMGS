@@ -21,4 +21,6 @@ public interface CityDao {
 
     void setTemperatureById(@Param("id")int id, @Param("temperature")String temperature);
 
+    void setPm2_5ById(@Param("id")int id, @Param("pm2_5")String pm2_5);
+
 }

@@ -20,6 +20,7 @@ public class City {
     private String lng;
     private String lat;
     private String temperature;
+    private String pm2_5;
 
     public int getId() {
         return id;
@@ -115,5 +116,13 @@ public class City {
 
     public void setTemperature(String temperature) {
         this.temperature = temperature;
+    }
+
+    public String getPm2_5() {
+        return pm2_5;
+    }
+
+    public void setPm2_5(String pm2_5) {
+        this.pm2_5 = pm2_5;
     }
 }

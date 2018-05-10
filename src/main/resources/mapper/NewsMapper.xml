@@ -8,12 +8,26 @@
         <result column="content" property="content" jdbcType="VARCHAR" />
     </resultMap>
 
+    <select id="getTotalNewsNum" resultType="Integer">
+        SELECT
+        COUNT(id)
+        FROM news
+    </select>
+
     <select id="getNews" resultMap="BaseMap">
         SELECT
         *
         FROM news
         ORDER BY time DESC
-        limit 0,20
+        limit #{start},#{num}
+    </select>
+
+    <select id="getNewsById" resultMap="BaseMap">
+        SELECT
+        *
+        FROM news
+        WHERE
+        id=#{id}
     </select>
 
     <select id="getLatestNews" resultMap="BaseMap">
@@ -24,11 +38,26 @@
         limit 0,1
     </select>
 
+    <update id="updateNews">
+        UPDATE
+        news
+        SET
+        title=#{title}, content=#{content}, time=#{time}
+        WHERE
+        id=#{id}
+    </update>
+
     <insert id="insertNews">
         INSERT INTO news
         (title, time, content)
         VALUES
         (#{title}, #{time}, #{content})
     </insert>
+
+    <delete id="deleteNewsById">
+        DELETE
+        FROM news
+        WHERE id=#{id}
+    </delete>
 
 </mapper>

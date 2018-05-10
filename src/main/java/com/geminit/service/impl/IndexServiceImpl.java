@@ -1,11 +1,9 @@
 package com.geminit.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.geminit.dao.CityDao;
-import com.geminit.dao.EarthquakeDao;
-import com.geminit.dao.UserDao;
-import com.geminit.entity.City;
-import com.geminit.entity.Earthquake;
+import com.geminit.dao.*;
+import com.geminit.entity.*;
 import com.geminit.service.IndexService;
 import com.geminit.util.PasswordUtil;
 import org.jsoup.Jsoup;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jms.Session;
 import javax.json.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +41,15 @@ public class IndexServiceImpl implements IndexService{
     @Autowired
     EarthquakeDao earthquakeDao;
 
+    @Autowired
+    NewsDao newsDao;
+
+    @Autowired
+    LawDao lawDao;
+
+    @Autowired
+    KnowledgeDao knowledgeDao;
+
     @Override
     public boolean login(String name, String password){
 
@@ -60,10 +68,11 @@ public class IndexServiceImpl implements IndexService{
     }
 
     @Override
-    public List<Map> getAllCityLLT(){
-        List<Map> llt = new ArrayList<>();
+    public JSONArray getAllCityNLLTP(){
 
-        List<City> cities = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray();
+
+        List<City> cities;
 
         try {
             cities = cityDao.getCities();
@@ -72,30 +81,34 @@ public class IndexServiceImpl implements IndexService{
         }
 
         for (int i = 0; i < cities.size(); i++) {
+            String name = cities.get(i).getName();
             String lng = cities.get(i).getLng();
             String lat =  cities.get(i).getLat();
             String temperature = cities.get(i).getTemperature();
+            String pm2_5 = cities.get(i).getPm2_5();
 
-            Map map = new HashMap();
-            map.put("lng", lng);
-            map.put("lat", lat);
-            map.put("temperature", temperature);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", name);
+            jsonObject.put("lng", lng);
+            jsonObject.put("lat", lat);
+            jsonObject.put("temperature", temperature);
+            jsonObject.put("pm2_5", pm2_5);
 
-            llt.add(map);
+            jsonArray.add(jsonObject);
         }
 
-        return llt;
+        return jsonArray;
     }
 
     @Override
-    public List<Map> getEarthquakeInfo() {
+    public JSONArray getEarthquakeInfo() {
 
-        List<Map> earthquakeInfo = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray();
 
-        List<Earthquake> earthquakeList = new ArrayList<>();
+        List<Earthquake> earthquakeList;
 
         try {
-            earthquakeList = earthquakeDao.getEarthquakeInfo();
+            earthquakeList = earthquakeDao.getEarthquakeInfo(0,10);
         } catch ( Exception e ) {
             e.printStackTrace();
             return null;
@@ -105,15 +118,64 @@ public class IndexServiceImpl implements IndexService{
 
             Earthquake earthquake = earthquakeList.get(i);
 
-            Map map = new HashMap();
-            map.put("name", earthquake.getName());
-            map.put("lat", earthquake.getLat());
-            map.put("lng", earthquake.getLng());
-            map.put("time", earthquake.getTime());
-            earthquakeInfo.add(map);
+            if ( Double.parseDouble(earthquake.getDegree()) < 3 )
+                continue;
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", earthquake.getName());
+            jsonObject.put("lat", earthquake.getLat());
+            jsonObject.put("lng", earthquake.getLng());
+            jsonObject.put("degree", earthquake.getDegree());
+            jsonObject.put("time", earthquake.getTime());
+            jsonArray.add(jsonObject);
         }
 
-        return earthquakeInfo;
+        return jsonArray;
+    }
+
+    @Override
+    public List<News> getIndexNews(){
+
+        List<News> news;
+
+        try {
+            news = newsDao.getNews(0,10);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return news;
+    }
+
+    @Override
+    public List<Law> getIndexLaws(){
+
+        List<Law> laws;
+
+        try {
+            laws = lawDao.getLaws(0, 5);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return laws;
+    }
+
+    @Override
+    public List<Knowledge> getIndexKnowledges(){
+
+        List<Knowledge> knowledges;
+
+        try {
+            knowledges = knowledgeDao.getKnowledges(0, 5);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return knowledges;
     }
 
 }

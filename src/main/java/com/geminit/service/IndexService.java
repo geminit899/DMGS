@@ -1,7 +1,11 @@
 package com.geminit.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.geminit.entity.City;
+import com.geminit.entity.Knowledge;
+import com.geminit.entity.Law;
+import com.geminit.entity.News;
 
 import java.util.List;
 import java.util.Map;
@@ -16,8 +20,14 @@ public interface IndexService {
 
     boolean login(String name, String password);
 
-    List<Map> getAllCityLLT();
+    JSONArray getAllCityNLLTP();
 
-    List<Map> getEarthquakeInfo();
+    JSONArray getEarthquakeInfo();
+
+    List<News> getIndexNews();
+
+    List<Law> getIndexLaws();
+
+    List<Knowledge> getIndexKnowledges();
 
 }

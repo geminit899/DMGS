@@ -15,10 +15,18 @@ import java.util.List;
 @Repository
 public interface KnowledgeDao {
 
-    List<Knowledge> getKnowledges();
+    int getTotalKnowledgeNum();
+
+    List<Knowledge> getKnowledges(@Param("start")int start, @Param("num")int num);
+
+    Knowledge getKnowledgeById(String id);
 
     Knowledge getLatestKnowledge();
 
+    void updateKnowledge(@Param("id")String id, @Param("title")String title, @Param("time")String time, @Param("content")String content);
+
     void insertKnowledges(@Param("title")String title, @Param("time")String time, @Param("content")String content);
+
+    void deleteKnowledgeById(String id);
 
 }

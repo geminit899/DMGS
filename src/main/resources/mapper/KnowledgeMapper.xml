@@ -8,12 +8,26 @@
         <result column="content" property="content" jdbcType="VARCHAR" />
     </resultMap>
 
+    <select id="getTotalKnowledgeNum" resultType="Integer">
+        SELECT
+        COUNT(id)
+        FROM knowledge
+    </select>
+
     <select id="getKnowledges" resultMap="BaseMap">
         SELECT
         *
         FROM knowledge
         ORDER BY time DESC
-        limit 0,20
+        limit #{start},#{num}
+    </select>
+
+    <select id="getKnowledgeById" resultMap="BaseMap">
+        SELECT
+        *
+        FROM knowledge
+        WHERE
+        id=#{id}
     </select>
 
     <select id="getLatestKnowledge" resultMap="BaseMap">
@@ -24,11 +38,26 @@
         limit 0,1
     </select>
 
+    <update id="updateKnowledge">
+        UPDATE
+        news
+        SET
+        title=#{title}, content=#{content}, time=#{time}
+        WHERE
+        id=#{id}
+    </update>
+
     <insert id="insertKnowledges">
         INSERT INTO knowledge
         (title, time, content)
         VALUES
         (#{title}, #{time}, #{content})
     </insert>
+
+    <delete id="deleteKnowledgeById">
+        DELETE
+        FROM knowledge
+        WHERE id=#{id}
+    </delete>
 
 </mapper>

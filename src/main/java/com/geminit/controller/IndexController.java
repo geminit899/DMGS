@@ -1,5 +1,10 @@
 package com.geminit.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.geminit.entity.Knowledge;
+import com.geminit.entity.Law;
+import com.geminit.entity.News;
 import com.geminit.service.IndexService;
 import com.geminit.service.ListenerService;
 import org.slf4j.LoggerFactory;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,15 +42,42 @@ public class IndexController {
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request) {
 
-        List<Map> llt = indexService.getAllCityLLT();
+        //listenerService.updatePM2_5();
 
-        List<Map> earthquakeInfo = indexService.getEarthquakeInfo();
+        JSONArray nlltp = indexService.getAllCityNLLTP();
+        JSONArray earthquakeInfo = indexService.getEarthquakeInfo();
+        Map<String, double[]> geocoordMap=new HashMap<>();
 
-        model.addAttribute("llt", llt);
+        insertIntoGeocoordMapByList(nlltp,geocoordMap);
+        insertIntoGeocoordMapByList(earthquakeInfo,geocoordMap);
+        JSONObject geoJsonObject = new JSONObject();
+        geoJsonObject.putAll(geocoordMap);
+
+        List<News> newsList = indexService.getIndexNews();
+        List<Law> lawList = indexService.getIndexLaws();
+        List<Knowledge> knowledgeList = indexService.getIndexKnowledges();
+
+        model.addAttribute("nlltp", nlltp);
         model.addAttribute("earthquakeInfo", earthquakeInfo);
+        model.addAttribute("geoJsonObject", geoJsonObject);
+        model.addAttribute("newsList", newsList);
+        model.addAttribute("lawList", lawList);
+        model.addAttribute("knowledgeList", knowledgeList);
+        model.addAttribute("shareList", knowledgeList);
 
         return "index";
 
+    }
+
+    private void insertIntoGeocoordMapByList(JSONArray jsonArray, Map<String, double[]> geocoordMap){
+        for ( int i = 0; i < jsonArray.size(); i++ ) {
+            JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+            double lng = Double.parseDouble(jsonObject.get("lng").toString());
+            double lat = Double.parseDouble(jsonObject.get("lat").toString());
+            double[] location = { lng, lat };
+            String name = jsonObject.get("name").toString();
+            geocoordMap.put( name, location);
+        }
     }
 
     //映射一个action

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geminit.dao.AboutUsDao">
+
+    <select id="getLawStatement" resultType="String">
+        SELECT
+        law_statement
+        FROM about_us
+        WHERE
+        id=1
+    </select>
+
+    <select id="getPrivacyProtection" resultType="String">
+        SELECT
+        privacy_protection
+        FROM about_us
+        WHERE
+        id=1
+    </select>
+
+    <select id="getWebsiteMap" resultType="String">
+        SELECT
+        website_map
+        FROM about_us
+        WHERE
+        id=1
+    </select>
+
+    <select id="getContactUs" resultType="String">
+        SELECT
+        contact_us
+        FROM about_us
+        WHERE
+        id=1
+    </select>
+
+    <update id="setLawStatement">
+        UPDATE
+        about_us
+        SET
+        law_statement=#{law_statement}
+        WHERE
+        id=1
+    </update>
+
+    <update id="setPrivacyProtection">
+        UPDATE
+        about_us
+        SET
+        privacy_protection=#{privacy_protection}
+        WHERE
+        id=1
+    </update>
+
+    <update id="setWebsiteMap">
+        UPDATE
+        about_us
+        SET
+        website_map=#{website_map}
+        WHERE
+        id=1
+    </update>
+
+    <update id="setContactUs">
+        UPDATE
+        about_us
+        SET
+        contact_us=#{contact_us}
+        WHERE
+        id=1
+    </update>
+
+
+</mapper>

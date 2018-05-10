@@ -1,0 +1,22 @@
+#contentTitle {
+    padding-top: 40px;
+    color: #234577;
+}
+
+#contentTime {
+    padding-top:0px;
+    padding-right: 50px;
+    color: #234577;
+}
+
+.contentDiv {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+#contentH3 {
+    line-height: 40px;
+    color: dimgray;
+}

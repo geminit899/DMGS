@@ -6,6 +6,7 @@
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="lng" property="lng" jdbcType="VARCHAR" />
         <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="degree" property="degree" jdbcType="VARCHAR" />
         <result column="time" property="time" jdbcType="TIMESTAMP" />
     </resultMap>
 
@@ -14,7 +15,7 @@
         *
         FROM earthquake
         ORDER BY time DESC
-        limit 0,10
+        limit #{start},#{num}
     </select>
 
     <select id="getLatestEarthquake" resultMap="BaseMap">
@@ -27,9 +28,9 @@
 
     <insert id="insertEarthquakeInfo">
         INSERT INTO earthquake
-        (name, lng, lat, time)
+        (name, lng, lat, degree, time)
         VALUES
-        (#{name}, #{lng}, #{lat}, #{time})
+        (#{name}, #{lng}, #{lat}, #{degree}, #{time})
     </insert>
 
 </mapper>

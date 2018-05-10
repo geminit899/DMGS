@@ -12,6 +12,7 @@ public class Earthquake {
     private String name;
     private String lng;
     private String lat;
+    private String degree;
     private String time;
 
     public int getId() {
@@ -44,6 +45,14 @@ public class Earthquake {
 
     public void setLat(String lat) {
         this.lat = lat;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 
     public String getTime() {
