@@ -17,7 +17,7 @@ public interface ResourceDao {
 
     int getAllResourceNum();
 
-    List<String> getResourceNameByPage(@Param("start")int start, @Param("num")int num);
+    List<String> getResourceName(@Param("start")int start, @Param("num")int num);
 
     List<Resource> getResourceByName(String name);
 

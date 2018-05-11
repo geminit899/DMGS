@@ -32,13 +32,13 @@
         <!-- navigation begin -->
         <div class="collapse navbar-collapse" style="padding-bottom: 5px;">
             <ul class="nav navbar-nav">
-                <li class="cl-effect-7"><a href="#">主页</a></li>
-                <li class="cl-effect-7 scroll"><a href="/disaster">灾害监测</a></li>
+                <li class="cl-effect-7"><a href="/index">主页</a></li>
+                <li class="cl-effect-7 scroll"><a href="/disaster?prefix=temperature">灾害监测</a></li>
                 <li class="cl-effect-7 scroll"><a href="/page?prefix=news">新闻快讯</a></li>
                 <li class="cl-effect-7 scroll"><a href="/page?prefix=law">政策法规</a></li>
                 <li class="cl-effect-7 scroll"><a href="/share">数据分享</a></li>
                 <li class="cl-effect-7 scroll"><a href="/page?prefix=knowledge">科普宣传</a></li>
-                <li class="cl-effect-7 scroll"><a href="/aboutUs">关于我们</a></li>
+                <li class="cl-effect-7 scroll"><a href="/aboutUs?prefix=lawStatement">关于我们</a></li>
             </ul>
         </div>
         <!-- //navigation end -->

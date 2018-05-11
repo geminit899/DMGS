@@ -13,7 +13,7 @@
         FROM resource
     </select>
 
-    <select id="getResourceNameByPage" resultType="String">
+    <select id="getResourceName" resultType="String">
         SELECT
         name
         FROM resource

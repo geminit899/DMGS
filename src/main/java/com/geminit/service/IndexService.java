@@ -30,4 +30,6 @@ public interface IndexService {
 
     List<Knowledge> getIndexKnowledges();
 
+    List<String> getResourceNames();
+
 }

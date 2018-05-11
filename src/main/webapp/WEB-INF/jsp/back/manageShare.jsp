@@ -34,16 +34,14 @@
         <div class="col-md-10 col-sm-10 col-xs-10">
             <table class="table table-bordered" border="1" id="table-user">
                 <tr align="center">
-                    <td class="success" width="10%"><label>编号</label></td>
-                    <td class="success" width="70%"><label>名称</label></td>
+                    <td class="success" width="80%"><label>名称</label></td>
                     <td class="success" width="20%"><label>操作</label></td>
                 </tr>
                 <c:forEach items="${list}" var="obj">
                     <tr class="table-bordered" align="center">
-                        <td>${obj.id}</td>
-                        <td>${obj.title}</td>
+                        <td>${obj}</td>
                         <td>
-                            <button class="btn btn-danger" onclick="objDelete(${obj.id})">删除</button>
+                            <button class="btn btn-danger" onclick="objDelete('${obj}')">删除</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -67,38 +65,39 @@
         <div class="col-md-1 col-sm-1 col-xs-1"></div>
     </div>
 
-    <div id="uploadDiv" style="padding-top: 100px;display: none" align="center">
-        <input type="file" id="myFile" style="opacity: 0" multiple>
-        <table id="table" style="width: 100%; padding-top: 50px">
-            <thead>
-            <tr>
-                <th width="20%">文件名</th>
-                <th width="15%">文件类型</th>
-                <th width="10%">文件大小</th>
-                <th width="10%">上传速度</th>
-                <th width="15%">上传进度</th>
-                <th width="15%">
-                    <input type="button" id="upload-all-btn" value="全部上传">
-                </th>
-                <th width="15%">删除</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
+    <div id="uploadDiv" class="row" style="padding-top: 100px;display: none" align="center">
+        <div class="col-md-1 col-sm-1 col-xs-1"></div>
+        <div class="col-md-10 col-sm-10 col-xs-10">
+            <input type="file" id="myFile" style="opacity: 0" multiple>
+            <table class="table table-bordered" border="1">
+                <tr align="center">
+                    <td class="success" width="20%"><label>文件名</label></td>
+                    <td class="success" width="10%"><label>文件类型</label></td>
+                    <td class="success" width="10%"><label>文件大小</label></td>
+                    <td class="success" width="10%"><label>上传速度</label></td>
+                    <td class="success" width="30%"><label>上传进度</label></td>
+                    <td class="success" width="20%"><label>操作</label></td>
+                </tr>
+                <tr class="table-bordered" align="center">
                     <td id="fileName">未选择文件</td>
                     <td id="fileType"></td>
                     <td id="fileSize"></td>
                     <td id="fileSpeed"></td>
-                    <td id="filePercent"></td>
                     <td>
-                        <input type="button" id="fileUpload" class="upload-item-btn">
+                        <div class="progress">
+                            <div id="filePercent" class="progress-bar" role="progressbar" aria-valuemax="100">
+                                0%
+                            </div>
+                        </div>
                     </td>
                     <td>
+                        <input type="button" id="fileUpload">
                         <input type="button" id="fileDelete" value='删除'>
                     </td>
                 </tr>
-            </tbody>
-        </table>
+            </table>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-1"></div>
     </div>
 
     <script type="text/javascript">
@@ -129,27 +128,38 @@
 
             file = files[0];
 
-            // 计算文件大小
-            var fileSize = file.size > 1024
-                         ? file.size / 1024  > 1024
-                         ? file.size / (1024 * 1024) > 1024
-                         ? (file.size / (1024 * 1024 * 1024)).toFixed(2) + 'GB'
-                            : (file.size / (1024 * 1024)).toFixed(2) + 'MB'
-                            : (file.size / 1024).toFixed(2) + 'KB'
+            $.ajax({                    //获得各个区域的值
+                type:"post",
+                async: false, //同步执行
+                url:"/manageShare/check",
+                data:{"name":file.name},
+                success:function(result){
+                    if (result.toString() == "success"){
+                        // 计算文件大小
+                        var fileSize = file.size > 1024
+                            ? file.size / 1024  > 1024
+                                ? file.size / (1024 * 1024) > 1024
+                                    ? (file.size / (1024 * 1024 * 1024)).toFixed(2) + 'GB'
+                                    : (file.size / (1024 * 1024)).toFixed(2) + 'MB'
+                                : (file.size / 1024).toFixed(2) + 'KB'
                             : (file.size).toFixed(2) + 'B';
 
 
-            lastChunk = 1;
-            chunk = 1;
-            state = "pause";
+                        lastChunk = 1;
+                        chunk = 1;
+                        state = "pause";
 
-            $("#uploadDiv").attr("style", "padding-top: 100px;");
-            $("#fileName").html(file.name);
-            $("#fileType").html(file.type);
-            $("#fileSize").html(fileSize);
-            $("#fileSpeed").html("0.00B/s");
-            $("#filePercent").html("未上传");
-            $("#fileUpload").attr("value", "立即上传");
+                        $("#uploadDiv").attr("style", "padding-top: 100px;");
+                        $("#fileName").html(file.name);
+                        $("#fileType").html(file.type);
+                        $("#fileSize").html(fileSize);
+                        $("#fileSpeed").html("0.00B/s");
+                        $("#fileUpload").attr("value", "立即上传");
+                    }else if (result.toString() == "error"){
+                        alert("已有同名文件，不能上传！");
+                    }
+                }
+            });
         });
 
         $("#fileUpload").click(function(){
@@ -187,11 +197,12 @@
                         percent = 100;
                     }
                     $("#filePercent").html( parseInt(percent) + "%" );
+                    $("#filePercent").attr("style", "width: " + parseInt(percent) +"%;");
                     // 如果所有文件切片都成功发送，发送文件合并请求。
                     if(percent == 100) {
                         state = "done";
                         $("#fileUpload").attr("value", "完成上传");
-                        $("#fileUpload").attr("disable", "disable");
+                        $("#fileUpload").attr("disabled", "disabled");
                         mergeFile();
                     }else{
                         start = end;
@@ -225,6 +236,8 @@
                     response = xhr.responseText;
                     if( response == "error" ) {
                         mergeFile();
+                    }else{
+                        window.location.reload();
                     }
                 }
             }
@@ -249,22 +262,23 @@
     </script>
 
     <script type="text/javascript">
-        function objDelete(id) {
+        function objDelete(obj){
+            deleteFileByName(obj);
+        }
 
-            var str = {};
-            str["prefix"] = "${prefix}";
-            str["id"] = id;
+        $("#fileDelete").click(function () {
+            deleteFileByName(file.name);
+        });
 
+        function deleteFileByName(name) {
             $.ajax({                    //获得各个区域的值
                 type:"post",
                 async: false, //同步执行
-                url:"/manage/delete",
-                data:str,
+                url:"/manageShare/delete",
+                data:{"name": name},
                 success:function(result){
                     if (result.toString() == "success"){
-                        $('#successModal').modal('show');
-                    }else if (result.toString() == "error"){
-                        $('#errorModal').modal('show');
+                        window.location.reload();
                     }
                 }
             });

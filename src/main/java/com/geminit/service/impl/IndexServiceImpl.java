@@ -50,6 +50,9 @@ public class IndexServiceImpl implements IndexService{
     @Autowired
     KnowledgeDao knowledgeDao;
 
+    @Autowired
+    ResourceDao resourceDao;
+
     @Override
     public boolean login(String name, String password){
 
@@ -176,6 +179,21 @@ public class IndexServiceImpl implements IndexService{
         }
 
         return knowledges;
+    }
+
+    @Override
+    public List<String> getResourceNames(){
+
+        List<String> resourceName;
+
+        try {
+            resourceName = resourceDao.getResourceName(0,10);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return resourceName;
     }
 
 }

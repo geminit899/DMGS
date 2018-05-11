@@ -56,6 +56,7 @@ public class IndexController {
         List<News> newsList = indexService.getIndexNews();
         List<Law> lawList = indexService.getIndexLaws();
         List<Knowledge> knowledgeList = indexService.getIndexKnowledges();
+        List<String> shareList = indexService.getResourceNames();
 
         model.addAttribute("nlltp", nlltp);
         model.addAttribute("earthquakeInfo", earthquakeInfo);
@@ -63,7 +64,7 @@ public class IndexController {
         model.addAttribute("newsList", newsList);
         model.addAttribute("lawList", lawList);
         model.addAttribute("knowledgeList", knowledgeList);
-        model.addAttribute("shareList", knowledgeList);
+        model.addAttribute("shareList", shareList);
 
         return "index";
 

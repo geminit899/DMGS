@@ -85,7 +85,7 @@
                             <h4 style="margin-top: 10px;">${type}</h4>
                         </div>
                     </div>
-                    <div class="content">
+                    <div class="content" style="margin-top: 10px">
                         <c:forEach items="${list}" var="obj" varStatus="status">
                             <c:if test="${!status.first}">
                                 <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
@@ -95,7 +95,7 @@
                                     <h5 style="color: darkgray;">${obj}</h5>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <input class="download" type="button" value="下载" data="${obj}">
+                                    <button type="button" class="btn btn-default" data="${obj}">下载</button>
                                 </div>
                             </div>
                         </c:forEach>
@@ -177,7 +177,7 @@
     </div>
 
     <script type="text/javascript">
-        $(".download").click(function () {
+        $(".btn").click(function () {
             var name = $(this).attr("data");
 
             var formData = new FormData();

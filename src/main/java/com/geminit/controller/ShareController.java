@@ -42,12 +42,14 @@ public class ShareController {
         if ( request.getParameter("page") != null )
             currentPage = Integer.parseInt( request.getParameter("page") );
 
-        List<String> resourceName = new ArrayList<>();
+        List<String> resourceName;
 
-        int start = (currentPage - 1) * 20;
+        int numPerPage = 10;
+
+        int start = (currentPage - 1) * numPerPage;
 
         try {
-            resourceName = resourceDao.getResourceNameByPage(start, 20);
+            resourceName = resourceDao.getResourceName(start, numPerPage);
             num = resourceDao.getAllResourceNum();
         } catch ( Exception e ) {
             e.printStackTrace();
@@ -56,12 +58,13 @@ public class ShareController {
 
         int pageNum;
 
-        if( num%20 == 0 )
-            pageNum = num/20;
+        if( num%10 == 0 )
+            pageNum = num/10;
         else
-            pageNum = num/20 + 1;
+            pageNum = num/10 + 1;
 
 
+        model.addAttribute("type", "数据分享");
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("pageNum", pageNum);
         model.addAttribute("list", resourceName);
