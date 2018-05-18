@@ -18,11 +18,11 @@ import java.util.Map;
 
 public interface IndexService {
 
+    String getSalt(String userName);
+
     boolean login(String name, String password);
 
-    JSONArray getAllCityNLLTP();
-
-    JSONArray getEarthquakeInfo();
+    JSONArray getDataList(String type);
 
     List<News> getIndexNews();
 
@@ -31,5 +31,7 @@ public interface IndexService {
     List<Knowledge> getIndexKnowledges();
 
     List<String> getResourceNames();
+
+    JSONArray getIndexImg();
 
 }

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: geminit
@@ -56,6 +57,31 @@
                                 </ul>
                             </div>
                         </nav>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="title row" style="margin: 0 0 0 0;">
+                        <div class="col-lg-8 col-md-8 col-sm-8">
+                            <h4 style="margin-top: 10px;">推荐新闻</h4>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <h4 style="margin-top: 10px;text-align: right;">
+                                <a href="/page?prefix=news" style="color: white;">more...</a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <c:forEach items="${leftSideMainNewsList}" var="mainNews" varStatus="status">
+                            <h5>
+                                <a href="/content?type=news&id=${mainNews.news_id}" style="color: darkgray;">${mainNews.title}</a>
+                            </h5>
+                            <c:if test="${!status.last}">
+                                <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
+                            </c:if>
+                            <c:if test="${status.last}">
+                                <hr style="margin-top: 10px;margin-bottom: 10px;" color="white" />
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
             </div>

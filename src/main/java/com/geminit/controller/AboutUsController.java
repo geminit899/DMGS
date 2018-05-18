@@ -1,6 +1,8 @@
 package com.geminit.controller;
 
 import com.geminit.dao.AboutUsDao;
+import com.geminit.dao.NewsDao;
+import com.geminit.entity.MainNews;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author Geminit
@@ -24,6 +27,9 @@ public class AboutUsController {
 
     @Autowired
     AboutUsDao aboutUsDao;
+
+    @Autowired
+    NewsDao newsDao;
 
     //映射一个action
     @RequestMapping("/aboutUs")
@@ -60,6 +66,9 @@ public class AboutUsController {
             return null;
         }
 
+        List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
+
+        model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
         model.addAttribute("prefix", prefix);
         model.addAttribute("type", type);
         model.addAttribute("content", content);

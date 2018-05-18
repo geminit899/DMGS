@@ -1,6 +1,8 @@
 package com.geminit.controller;
 
+import com.geminit.dao.NewsDao;
 import com.geminit.dao.ResourceDao;
+import com.geminit.entity.MainNews;
 import com.geminit.entity.Resource;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class ShareController {
 
     @Autowired
     ResourceDao resourceDao;
+
+    @Autowired
+    NewsDao newsDao;
 
     //映射一个action
     @RequestMapping("/share")
@@ -63,7 +68,9 @@ public class ShareController {
         else
             pageNum = num/10 + 1;
 
+        List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
 
+        model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
         model.addAttribute("type", "数据分享");
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("pageNum", pageNum);

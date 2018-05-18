@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.geminit.dao.TaifengDao">
+    <resultMap id="BaseMap" type="com.geminit.entity.Taifeng">
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="pid" property="pid" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="VARCHAR" />
+        <result column="degree" property="degree" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="ListMap" type="com.geminit.entity.DataList">
+        <result column="time" property="value" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getTaifengName" resultType="String">
+        SELECT
+        name
+        FROM taifeng
+        WHERE
+        pid=0
+    </select>
+
+    <select id="getTaifengByName" resultMap="BaseMap">
+        SELECT
+        *
+        FROM taifeng
+        WHERE
+        name=#{name} AND
+        pid!=0
+        ORDER BY id ASC
+    </select>
+
+    <select id="getTaifengList" resultMap="ListMap">
+        SELECT time, COUNT(time) AS num
+        FROM taifeng
+        WHERE pid=0
+        GROUP BY time
+        ORDER BY time DESC
+        limit 0,12
+    </select>
+
+    <select id="getStrongestTaifeng" resultMap="BaseMap">
+        SELECT *
+        FROM taifeng
+        WHERE pid=0
+        ORDER BY degree DESC
+        limit 0,10
+    </select>
+
+    <update id="updateTaifengById">
+        UPDATE
+        taifeng
+        SET
+        name=#{name}, lng=#{lng}, lat=#{lat}, degree=#{degree}, time=#{time}
+        WHERE
+        id=#{id}
+    </update>
+
+    <insert id="insertTaifeng">
+        INSERT INTO taifeng
+        (pid, name, lng, lat, time, degree)
+        VALUES
+        (#{pid}, #{name}, #{lng}, #{lat}, #{time}, #{degree})
+    </insert>
+
+    <delete id="deleteTaifengById">
+        DELETE
+        FROM taifeng
+        WHERE
+        id=#{id}
+    </delete>
+
+</mapper>

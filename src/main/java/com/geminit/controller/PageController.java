@@ -5,6 +5,7 @@ import com.geminit.dao.LawDao;
 import com.geminit.dao.NewsDao;
 import com.geminit.entity.Knowledge;
 import com.geminit.entity.Law;
+import com.geminit.entity.MainNews;
 import com.geminit.entity.News;
 import com.geminit.service.PageService;
 import org.slf4j.LoggerFactory;
@@ -92,7 +93,9 @@ public class PageController {
         else
             pageNum = num/20 + 1;
 
+        List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
 
+        model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
         model.addAttribute("prefix", prefix);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("pageNum", pageNum);

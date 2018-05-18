@@ -13,8 +13,8 @@
         <result column="zip" property="zip" jdbcType="VARCHAR" />
         <result column="lng" property="lng" jdbcType="VARCHAR" />
         <result column="lat" property="lat" jdbcType="VARCHAR" />
-        <result column="temperature" property="temperature" jdbcType="VARCHAR" />
-        <result column="pm2_5" property="pm2_5" jdbcType="VARCHAR" />
+        <result column="temperature" property="temperature" jdbcType="INTEGER" />
+        <result column="pm2_5" property="pm2_5" jdbcType="INTEGER" />
     </resultMap>
 
     <select id="getCities" resultMap="BaseMap">
@@ -26,12 +26,34 @@
         ORDER BY id ASC
     </select>
 
-    <select id="getLLTByName" resultType="String">
+    <select id="getCityByName" resultMap="BaseMap">
         SELECT
-        lng, lat, temperature
+        *
         FROM city
         WHERE
-        name=#{name}
+        level=2
+        ORDER BY temperature DESC
+        limit 0,10
+    </select>
+
+    <select id="getTop10TemperatureCities" resultMap="BaseMap">
+        SELECT
+        *
+        FROM city
+        WHERE
+        level=2
+        ORDER BY temperature DESC
+        limit 0,10
+    </select>
+
+    <select id="getTop10Pm2_5Cities" resultMap="BaseMap">
+        SELECT
+        *
+        FROM city
+        WHERE
+        level=2
+        ORDER BY pm2_5 DESC
+        limit 0,10
     </select>
 
     <update id="setTemperatureById">

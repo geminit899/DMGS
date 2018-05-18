@@ -17,7 +17,11 @@ public interface CityDao {
 
     List<City> getCities();
 
-    List<String> getLLTByName(String name);
+    List<City> getCityByName(String name);
+
+    List<City> getTop10TemperatureCities();
+
+    List<City> getTop10Pm2_5Cities();
 
     void setTemperatureById(@Param("id")int id, @Param("temperature")String temperature);
 

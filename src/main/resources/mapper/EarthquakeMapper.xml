@@ -10,12 +10,30 @@
         <result column="time" property="time" jdbcType="TIMESTAMP" />
     </resultMap>
 
+    <resultMap id="ListMap" type="com.geminit.entity.DataList">
+        <result column="name" property="value" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getEarthquakeNum" resultType="Integer">
+        SELECT
+        COUNT(id)
+        FROM earthquake
+    </select>
+
     <select id="getEarthquakeInfo" resultMap="BaseMap">
         SELECT
         *
         FROM earthquake
         ORDER BY time DESC
         limit #{start},#{num}
+    </select>
+
+    <select id="getStrongestEarthquake" resultMap="BaseMap">
+        SELECT *
+        FROM earthquake
+        ORDER BY degree DESC
+        limit 0,10
     </select>
 
     <select id="getLatestEarthquake" resultMap="BaseMap">
@@ -26,11 +44,36 @@
         limit 0,1
     </select>
 
+    <select id="getEarthquakeList" resultMap="ListMap">
+        SELECT city.name, COUNT(province) AS num
+        FROM earthquake,city
+        WHERE province=city.id
+        GROUP BY province
+        ORDER BY num DESC
+        limit 0,10
+    </select>
+
+    <update id="updateEarthquakeById">
+        UPDATE
+        earthquake
+        SET
+        name=#{name}, lng=#{lng}, lat=#{lat}, degree=#{degree}, time=#{time}
+        WHERE
+        id=#{id}
+    </update>
+
     <insert id="insertEarthquakeInfo">
         INSERT INTO earthquake
         (name, lng, lat, degree, time)
         VALUES
         (#{name}, #{lng}, #{lat}, #{degree}, #{time})
     </insert>
+
+    <delete id="deleteEarthquakeById">
+        DELETE
+        FROM earthquake
+        WHERE
+        id=#{id}
+    </delete>
 
 </mapper>

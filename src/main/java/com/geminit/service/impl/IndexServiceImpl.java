@@ -42,6 +42,9 @@ public class IndexServiceImpl implements IndexService{
     EarthquakeDao earthquakeDao;
 
     @Autowired
+    TaifengDao taifengDao;
+
+    @Autowired
     NewsDao newsDao;
 
     @Autowired
@@ -54,82 +57,70 @@ public class IndexServiceImpl implements IndexService{
     ResourceDao resourceDao;
 
     @Override
+    public String getSalt(String userName){
+        String salt = new String();
+
+        try {
+            salt = userDao.getSaltByName(userName);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return "error";
+        }
+
+        if ( salt == null )
+            return "error";
+
+        return salt;
+
+    }
+
+    @Override
     public boolean login(String name, String password){
-
-        if ( userDao.getUserByName(name) == null)
-            return false;
-
-        String salt = userDao.getSaltByName(name);
         String md5 = userDao.getMd5ByName(name);
 
-        String inputMd5 = PasswordUtil.generateMd5BySalt(password, salt);
-
-        if ( md5.equals(inputMd5) )
+        if ( md5.equals(password) )
             return true;
         else
             return false;
     }
 
     @Override
-    public JSONArray getAllCityNLLTP(){
-
+    public JSONArray getDataList(String type) {
         JSONArray jsonArray = new JSONArray();
-
-        List<City> cities;
+        List<DataList> dataList = new ArrayList<>();
 
         try {
-            cities = cityDao.getCities();
-        } catch ( Exception e ) {
-            return null;
-        }
+            switch (type) {
+                case "earthquake":
+                    dataList = earthquakeDao.getEarthquakeList();
+                    int totle = earthquakeDao.getEarthquakeNum();
+                    int here = 0;
+                    for (int i = 0; i < dataList.size(); i++)
+                        here += Integer.parseInt(dataList.get(i).getNum());
+                    int left = totle - here;
+                    DataList leftData = new DataList();
+                    leftData.setValue("其它");
+                    leftData.setNum(Integer.toString(left));
+                    dataList.add(leftData);
+                    break;
+                case "taifeng":
+                    dataList = taifengDao.getTaifengList();
+                    break;
+            }
 
-        for (int i = 0; i < cities.size(); i++) {
-            String name = cities.get(i).getName();
-            String lng = cities.get(i).getLng();
-            String lat =  cities.get(i).getLat();
-            String temperature = cities.get(i).getTemperature();
-            String pm2_5 = cities.get(i).getPm2_5();
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", name);
-            jsonObject.put("lng", lng);
-            jsonObject.put("lat", lat);
-            jsonObject.put("temperature", temperature);
-            jsonObject.put("pm2_5", pm2_5);
-
-            jsonArray.add(jsonObject);
-        }
-
-        return jsonArray;
-    }
-
-    @Override
-    public JSONArray getEarthquakeInfo() {
-
-        JSONArray jsonArray = new JSONArray();
-
-        List<Earthquake> earthquakeList;
-
-        try {
-            earthquakeList = earthquakeDao.getEarthquakeInfo(0,10);
         } catch ( Exception e ) {
             e.printStackTrace();
             return null;
         }
 
-        for ( int i = 0; i < earthquakeList.size(); i++ ) {
-
-            Earthquake earthquake = earthquakeList.get(i);
-
-            if ( Double.parseDouble(earthquake.getDegree()) < 3 )
-                continue;
-
+        for (int i = 0; i < dataList.size(); i++) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", earthquake.getName());
-            jsonObject.put("lat", earthquake.getLat());
-            jsonObject.put("lng", earthquake.getLng());
-            jsonObject.put("degree", earthquake.getDegree());
-            jsonObject.put("time", earthquake.getTime());
+            String value = dataList.get(i).getValue();
+            String num = dataList.get(i).getNum();
+
+            jsonObject.put("value", value);
+            jsonObject.put("num", num);
+
             jsonArray.add(jsonObject);
         }
 
@@ -196,4 +187,29 @@ public class IndexServiceImpl implements IndexService{
         return resourceName;
     }
 
+    @Override
+    public JSONArray getIndexImg(){
+
+        JSONArray indexImg = new JSONArray();
+
+        List<MainNews> mainNewsList = new ArrayList<>();
+
+        try {
+            mainNewsList = newsDao.getMainNews();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        for ( int i = 0; i < mainNewsList.size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put("img", mainNewsList.get(i).getImg());
+            jsonObject.put("a", "/content?type=news&id=" + mainNewsList.get(i).getNews_id());
+
+            indexImg.add(jsonObject);
+        }
+
+        return indexImg;
+    }
 }

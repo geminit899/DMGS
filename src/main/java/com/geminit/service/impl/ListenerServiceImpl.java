@@ -15,14 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Geminit
@@ -136,9 +134,6 @@ public class ListenerServiceImpl implements ListenerService {
             if ( latestName.equals(name)  && latestTime.equals(time) )
                 return;
 
-            if ( !inChina(name) )
-                continue;
-
             String lng = tds.get(3).text();
             String lat = tds.get(2).text();
             String degree = tds.get(0).text();
@@ -166,45 +161,14 @@ public class ListenerServiceImpl implements ListenerService {
             return;
         }
 
+        Random rand = new Random();
+
         try {
-            URL url = new URL("https://chkj02.market.alicloudapi.com/qgtq");// 创建连接
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setUseCaches(false);
-            connection.setInstanceFollowRedirects(true);
-            connection.setRequestMethod("GET"); // 设置请求方式
-            connection.setRequestProperty("Authorization", "APPCODEbb1a9c2cea4848ba93d4d60811730e8c"); // 设置接收数据的格式
-            connection.setRequestProperty("Content-Type", "application/json"); // 设置发送数据的格式
-            connection.connect();
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8"); // utf-8编
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("city", "深圳");
-            out.append(JSON.toJSONString(jsonObject));
-            out.flush();
-            out.close();
+            for ( int i = 0; i < cities.size(); i++) {
+                int id = cities.get(i).getId();
+                String pm2_5 = Integer.toString( rand.nextInt(190) + 10 );
 
-            int code = connection.getResponseCode();
-            InputStream is = null;
-            if (code == 200) {
-                is = connection.getInputStream();
-            } else {
-                is = connection.getErrorStream();
-            }
-
-            // 读取响应
-            int length = (int) connection.getContentLength();// 获取长度
-            if (length != -1) {
-                byte[] data = new byte[length];
-                byte[] temp = new byte[512];
-                int readLen = 0;
-                int destPos = 0;
-                while ((readLen = is.read(temp)) > 0) {
-                    System.arraycopy(temp, 0, data, destPos, readLen);
-                    destPos += readLen;
-                }
-                String result = new String(data, "UTF-8"); // utf-8编码
-                System.out.println(result);
+                cityDao.setPm2_5ById(id, pm2_5);
             }
 
         } catch (Exception e) {
@@ -389,17 +353,4 @@ public class ListenerServiceImpl implements ListenerService {
         }
 
     }
-
-    private boolean inChina(String name){
-        String[] suffix = { "区", "县", "市", "海域" };
-
-        for (int i = 0; i < suffix.length; i++){
-            if ( name.endsWith(suffix[i]) ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 }

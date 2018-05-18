@@ -38,10 +38,8 @@
                 <ul class="dropdown-menu dropdown-user">
                     <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
                     <li class="divider"></li>
-                    <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -71,7 +69,15 @@
                     </ul>
                 </li>
                 <li>
-                    <a id="news" href="/manage?prefix=news"><i class="fa fa-dashboard"></i> 新闻管理</a>
+                    <a id="news" href="#"><i class="fa fa-sitemap"></i> 新闻管理<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="/manage?prefix=news">所有新闻</a>
+                        </li>
+                        <li>
+                            <a href="/manageMainNews">重点新闻</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a id="law" href="/manage?prefix=law"><i class="fa fa-desktop"></i> 政策管理</a>

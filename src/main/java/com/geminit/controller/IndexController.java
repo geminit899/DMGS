@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,44 +43,34 @@ public class IndexController {
     //映射一个action
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request) {
-
-        //listenerService.updatePM2_5();
-
-        JSONArray nlltp = indexService.getAllCityNLLTP();
-        JSONArray earthquakeInfo = indexService.getEarthquakeInfo();
-        Map<String, double[]> geocoordMap=new HashMap<>();
-
-        insertIntoGeocoordMapByList(nlltp,geocoordMap);
-        insertIntoGeocoordMapByList(earthquakeInfo,geocoordMap);
-        JSONObject geoJsonObject = new JSONObject();
-        geoJsonObject.putAll(geocoordMap);
+        JSONArray earthquakeList = indexService.getDataList("earthquake");
+        JSONArray taifengList = indexService.getDataList("taifeng");
 
         List<News> newsList = indexService.getIndexNews();
         List<Law> lawList = indexService.getIndexLaws();
         List<Knowledge> knowledgeList = indexService.getIndexKnowledges();
-        List<String> shareList = indexService.getResourceNames();
+        List<String> shareList = indexService.getResourceNames() ;
 
-        model.addAttribute("nlltp", nlltp);
-        model.addAttribute("earthquakeInfo", earthquakeInfo);
-        model.addAttribute("geoJsonObject", geoJsonObject);
+        JSONArray indexImgArray = indexService.getIndexImg();
+
+        model.addAttribute("earthquakeList", earthquakeList);
+        model.addAttribute("taifengList", taifengList);
         model.addAttribute("newsList", newsList);
         model.addAttribute("lawList", lawList);
         model.addAttribute("knowledgeList", knowledgeList);
         model.addAttribute("shareList", shareList);
+        model.addAttribute("indexImgArray", indexImgArray);
 
         return "index";
 
     }
 
-    private void insertIntoGeocoordMapByList(JSONArray jsonArray, Map<String, double[]> geocoordMap){
-        for ( int i = 0; i < jsonArray.size(); i++ ) {
-            JSONObject jsonObject = (JSONObject)jsonArray.get(i);
-            double lng = Double.parseDouble(jsonObject.get("lng").toString());
-            double lat = Double.parseDouble(jsonObject.get("lat").toString());
-            double[] location = { lng, lat };
-            String name = jsonObject.get("name").toString();
-            geocoordMap.put( name, location);
-        }
+    //映射一个action
+    @RequestMapping("/index/login/getSalt")
+    @ResponseBody
+    public String getSalt(@RequestParam("userName")String userName, HttpServletRequest request) {
+        String salt = indexService.getSalt(userName);
+        return salt;
     }
 
     //映射一个action
@@ -86,7 +78,7 @@ public class IndexController {
     @ResponseBody
     public String login(HttpServletRequest request, HttpServletResponse response) {
 
-        String username = request.getParameter("username");
+        String username = request.getParameter("userName");
         String password = request.getParameter("password");
 
         boolean flag = false;
@@ -98,9 +90,15 @@ public class IndexController {
         }
 
         if ( flag )
-            return "true";
+            return "success";
         else
-            return "false";
+            return "error";
+    }
+
+    //映射一个action
+    @RequestMapping("/logout")
+    public void logout(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.sendRedirect("/index");
     }
 
 }

@@ -25,29 +25,23 @@
         <jsp:include page="util/header.jsp"></jsp:include>
 
         <!-- Swiper -->
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="margin-top: 20px;">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
             <ol class="carousel-indicators">
-                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                <c:forEach begin="0" end="${indexImgArray.size()}" var="i" varStatus="status">
+                    <li data-target="#carousel-example-generic" data-slide-to="${i}"<c:if test="${status.first}"> class="active"</c:if>></li>
+                </c:forEach>
             </ol>
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div class="item active">
-                    <img src="http://www.dsac.cn/file/gundong/6e22ff27-9c5f-401a-bdb5-78bbd37fb120.jpg" alt="...">
-                </div>
-                <div class="item">
-                    <img src="http://www.dsac.cn/file/gundong/a35dde4f-9a45-4d96-a828-7354509a2a0f.jpg" alt="...">
-                </div>
-                <div class="item">
-                    <img src="http://www.dsac.cn/file/gundong/1fb486d9-b3ab-42ae-b1cd-6a6292c9ce26.jpg" alt="...">
-                </div>
-                <div class="item">
-                    <img src="http://www.dsac.cn/file/gundong/bd7e515c-be3f-459c-ad1e-cdbd9fc328c9.jpg" alt="...">
-                </div>
+                <c:forEach items="${indexImgArray}" var="indexImg" varStatus="status">
+                    <div class="item<c:if test="${status.first}"> active</c:if>">
+                        <a href="${indexImg.a}">
+                            <img src="${indexImg.img}" alt="..."  style="height: 500px; width: 100%">
+                        </a>
+                    </div>
+                </c:forEach>
             </div>
 
             <!-- Controls -->
@@ -63,18 +57,7 @@
         <!-- Swiper End -->
 
         <!-- echarts begin -->
-        <div class="echarts row">
-            <!-- left map -->
-            <div class="col-lg-8 col-md-8 col-sm-8">
-                <div id="map" style="width: 100%;"></div>
-            </div>
-            <!-- //left map -->
-            <!-- right charts -->
-            <div class="col-lg-4 col-md-4 col-sm-4">
-                <div id="charts" style="width: 100%;"></div>
-            </div>
-            <!-- //right charts -->
-        </div>
+        <div id="echarts"></div>
         <!-- //echarts end -->
 
         <!-- main body begin -->
@@ -88,14 +71,14 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <h4 style="margin-top: 10px;text-align: right;">
-                                <a href="#" style="color: white;">more...</a>
+                                <a href="/page?prefix=news" style="color: white;">more...</a>
                             </h4>
                         </div>
                     </div>
                     <div class="content">
                         <c:forEach items="${newsList}" var="news">
                             <h5>
-                                <a href="#" style="color: darkgray;">${news.title}</a>
+                                <a href="/content?type=news&id=${news.id}" style="color: darkgray;">${news.title}</a>
                             </h5>
                             <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
                         </c:forEach>
@@ -108,14 +91,14 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <h4 style="margin-top: 10px;text-align: right;">
-                                <a href="#" style="color: white;">more...</a>
+                                <a href="/page?prefix=knowledge" style="color: white;">more...</a>
                             </h4>
                         </div>
                     </div>
                     <div class="content">
                         <c:forEach items="${knowledgeList}" var="knowledge">
                             <h5>
-                                <a href="#" style="color: darkgray;">${knowledge.title}</a>
+                                <a href="/content?type=knowledge&id=${knowledge.id}" style="color: darkgray;">${knowledge.title}</a>
                             </h5>
                             <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
                         </c:forEach>
@@ -132,14 +115,14 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <h4 style="margin-top: 10px;text-align: right;">
-                                <a href="#" style="color: white;">more...</a>
+                                <a href="/share" style="color: white;">more...</a>
                             </h4>
                         </div>
                     </div>
                     <div class="content">
                         <c:forEach items="${shareList}" var="share">
-                            <h5>
-                                <a href="#" style="color: darkgray;">${share.title}</a>
+                            <h5 style="color: darkgray;">
+                                ${share}
                             </h5>
                             <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
                         </c:forEach>
@@ -152,14 +135,21 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <h4 style="margin-top: 10px;text-align: right;">
-                                <a href="#" style="color: white;">more...</a>
+                                <a href="/page?prefix=law" style="color: white;">more...</a>
                             </h4>
                         </div>
                     </div>
                     <div class="content">
                         <c:forEach items="${lawList}" var="law">
                             <h5>
-                                <a href="#" style="color: darkgray;">${law.title}</a>
+                                <a href="/content?type=law&id=${law.id}" style="color: darkgray;">
+                                    <c:if test="${law.title.length()>23}">
+                                        ${law.title.substring(0, 22)}...
+                                    </c:if>
+                                    <c:if test="${law.title.length()<=23}">
+                                        ${law.title}
+                                    </c:if>
+                                </a>
                             </h5>
                             <hr style="margin-top: 10px;margin-bottom: 10px;" color="gray" />
                         </c:forEach>
@@ -176,228 +166,140 @@
         <script src="/js/china.js"></script>
 
         <script type="text/javascript">
-            var e = document.getElementById("map");
+            var e = document.getElementById("echarts");
             var height = parseInt(window.getComputedStyle(e).width);
 
-            $("#map").attr("style", "height: " + height * 0.8 + "px;width: 100%;");
-            $("#charts").attr("style", "height: " + height * 0.8 + "px;width: 100%;");
+            $("#echarts").attr("style", "height: " + height * 0.3 + "px;width: 100%;");
         </script>
 
         <script type="text/javascript">
-            var myChart = echarts.init(document.getElementById('map'));
+            var myChart = echarts.init(document.getElementById('echarts'));
 
-            var temperatureData = [];
-            var earthquakeData = [];
-            var geoCoordMap = eval(${geoJsonObject});
+            var month = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 
-            var minT = 0;
-            var maxT = 0;
+            var earthquakeBarData = {};
+            var earthquakePieData = {};
+            var taifengValues = [];
+            var taifengData = {};
 
-            for (var i = 0; i<eval(${nllt.size()}); i++) {
-                temperatureData.push({'name':${nllt}[i].name, 'value': ${nllt}[i].temperature, 'time':''});
-                temperature = ${nllt}[i].temperature;
-                if ( parseInt(temperature) < minT )
-                    minT = parseInt(temperature);
-                if ( parseInt(temperature) > maxT )
-                    maxT = parseInt(temperature);
-            }
+            var eathquake_max = 0;
+            var taifeng_max = 0;
 
-            for (var i = 0; i<eval(${earthquakeInfo.size()}); i++) {
-                earthquakeData.push({'name':${earthquakeInfo}[i].name, 'value': ${earthquakeInfo}[i].degree*10,
-                                     'time': ${earthquakeInfo}[i].time});
-            }
-
-            var convertData = function (data) {
-                var res = [];
-                for (var i = 0; i < data.length; i++) {
-                    var geoCoord = geoCoordMap[data[i].name];
-                    if (geoCoord) {
-                        res.push({
-                            name: data[i].name,
-                            value: geoCoord.concat(data[i].value),
-                            label: data[i].time,
-                        });
-                    }
+            for ( var i = 0; i < ${earthquakeList.size()-1}; i++ ) {
+                earthquakeBarData[${earthquakeList}[i].value] = ${earthquakeList}[i].num;
+                if ( i < 5 ) {
+                    earthquakePieData[${earthquakeList}[i].value] = ${earthquakeList}[i].num;
                 }
-                return res;
-            };
+                if ( eathquake_max < parseInt(${earthquakeList}[i].num) )
+                    eathquake_max = parseInt(${earthquakeList}[i].num);
+            }
+
+            for ( var i = 0; i < ${taifengList.size()}; i++ ) {
+                var value = parseInt(${taifengList}[i].value.split("-")[1]);
+                taifengValues.push(value);
+            }
+
+            for ( var i = 0; i < month.length; i++ ){
+                taifengData[month[i]] = 0;
+            }
+
+            for ( var i = 0; i < taifengValues.length; i++ ){
+                var theMonth = taifengValues[i];
+                taifengData[month[theMonth]] = ${taifengList}[i].num;
+            }
+
+            var leftIndex = ${earthquakeList.size()-1};
+            earthquakePieData[${earthquakeList}[leftIndex].value] = ${earthquakeList}[leftIndex].num;
 
             option = {
-                backgroundColor: '#FFFFFF',
-                visualMap: {
-                    min: minT,
-                    max: maxT,
-                    calculable: true,
-                    color: ['#d94e5d','#eac736','#50a3ba'],
-                    textStyle: {
-                        color: '#234577'
-                    },
-                    hoverLink:false,
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: function (params) {
-                        switch ( params.seriesName )
-                        {
-                            case "气温":
-                                name = params.name;
-                                temperature = params.value[2];
-                                str = "城市：" + name + "<br/>温度：" + temperature;
-                                return str;
-                            case "地震":
-                                name = params.name;
-                                degree = params.value[2]/10;
-                                time = params.data.label;
-                                str = "位置：" + name + "<br/>震级：" + degree + "<br/>时间：" + time;
-                                return str;
+                backgroundColor: '#fff',
+                tooltip: {},
+                title: [{
+                    text: '地震多发地区',
+                    x: '25%',
+                    textAlign: 'center'
+                }, {
+                    text: '今年各月台风发生次数',
+                    x: '75%',
+                    textAlign: 'center'
+                }],
+                grid: [{
+                    top: 10,
+                    width: '40%',
+                    bottom: 10,
+                    left: 10,
+                    containLabel: true
+                },{
+                    top: 50,
+                    width: '48%',
+                    bottom: 10,
+                    left: '50%',
+                    containLabel: true
+                }],
+                xAxis: [{
+                    type: 'value',
+                    max: eathquake_max,
+                    splitLine: {
+                        show: false
+                    }
+                },{
+                    gridIndex: 1,
+                    type : 'category',
+                    boundaryGap : false,
+                    data : month,
+                }],
+                yAxis: [{
+                    type: 'category',
+                    data: Object.keys(earthquakeBarData),
+                    splitLine: {
+                        show: false
+                    }
+                },{
+                    type: 'value',
+                    gridIndex: 1,
+                }],
+                series: [{
+                    type: 'bar',
+                    stack: 'earthquake',
+                    z: 3,
+                    label: {
+                        normal: {
+                            position: 'right',
+                            show: true
                         }
                     },
-                },
-                legend: {
-                    x:'center',
-                    y: 'top',
-                    data:['气温','地震'],
-                },
-                color:['#eac736','#d94e5d'],
-                geo: {
-                    map: 'china',
+                    data: Object.keys(earthquakeBarData).map(function (key) {
+                        return earthquakeBarData[key];
+                    })
+                },{
+                    type: 'bar',
+                    stack: 'taifeng',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    z: 3,
                     label: {
-                        emphasis: {
+                        normal: {
                             show: false
                         }
                     },
-                    roam: false,
-                    itemStyle: {
-                        normal: {
-                            areaColor: '#347EBE',
-                            borderColor: '#111'
-                        },
-                        emphasis: {
-                            areaColor: '#36648B'
+                    data: Object.keys(taifengData).map(function (key) {
+                        return taifengData[key];
+                    })
+                }, {
+                    type: 'pie',
+                    radius: [0, '30%'],
+                    center: ['35%', '40%'],
+                    data: Object.keys(earthquakePieData).map(function (key) {
+                        return {
+                            name: key,
+                            value: earthquakePieData[key]
                         }
-                    }
-                },
-                series : [
-                    {
-                        name: '气温',
-                        type: 'scatter',
-                        coordinateSystem: 'geo',
-                        data: convertData(temperatureData),
-                        symbolSize: 5,
-                        label: {
-                            normal: {
-                                show: false
-                            },
-                            emphasis: {
-                                show: false
-                            }
-                        },
-                        itemStyle: {
-                            emphasis: {
-                                borderColor: '#fff',
-                                borderWidth: 1
-                            }
-                        }
-                    },
-                    {
-                        name: '地震',
-                        type: 'scatter',
-                        coordinateSystem: 'geo',
-                        data: convertData(earthquakeData),
-                        symbol: 'pin',
-                        symbolSize: function (val) {
-                            return val[2];
-                        },
-                        label: {
-                            normal: {
-                                position: 'right',
-                                show: false
-                            },
-                            emphasis: {
-                                show: false
-                            }
-                        }
-                    }
-                ]
-            };
-            myChart.setOption(option);
-        </script>
-
-        <script type="text/javascript">
-            var myChart = echarts.init(document.getElementById('charts'));
-            option = {
-                backgroundColor: '#FFFFFF',
-                title : {
-                    text: '南丁格尔玫瑰图',
-                    x:'center'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    x : 'center',
-                    y : 'bottom',
-                    data:['rose1','rose2','rose3','rose4','rose5','rose6','rose7','rose8']
-                },
-                calculable : true,
-                series : [
-                    {
-                        name:'半径模式',
-                        type:'pie',
-                        radius : [20, 90],
-                        center : ['50%', '25%'],
-                        roseType : 'radius',
-                        label: {
-                            normal: {
-                                show: false
-                            },
-                            emphasis: {
-                                show: true
-                            }
-                        },
-                        lableLine: {
-                            normal: {
-                                show: false
-                            },
-                            emphasis: {
-                                show: true
-                            }
-                        },
-                        data:[
-                            {value:10, name:'rose1'},
-                            {value:5, name:'rose2'},
-                            {value:15, name:'rose3'},
-                            {value:25, name:'rose4'},
-                            {value:20, name:'rose5'},
-                            {value:35, name:'rose6'},
-                            {value:30, name:'rose7'},
-                            {value:40, name:'rose8'}
-                        ]
-                    },
-                    {
-                        name:'面积模式',
-                        type:'pie',
-                        radius : [30, 90],
-                        center : ['50%', '65%'],
-                        roseType : 'area',
-                        data:[
-                            {value:10, name:'rose1'},
-                            {value:5, name:'rose2'},
-                            {value:15, name:'rose3'},
-                            {value:25, name:'rose4'},
-                            {value:20, name:'rose5'},
-                            {value:35, name:'rose6'},
-                            {value:30, name:'rose7'},
-                            {value:40, name:'rose8'}
-                        ]
-                    }
-                ]
-            };
+                    })
+                }]
+            }
 
             myChart.setOption(option);
         </script>
-
     </div>
 </body>
 </html>

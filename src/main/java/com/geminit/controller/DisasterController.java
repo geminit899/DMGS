@@ -1,11 +1,20 @@
 package com.geminit.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.geminit.dao.NewsDao;
+import com.geminit.entity.MainNews;
+import com.geminit.service.DisasterService;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Geminit
@@ -19,6 +28,12 @@ public class DisasterController {
     //添加一个日志器
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    @Autowired
+    DisasterService disasterService;
+
+    @Autowired
+    NewsDao newsDao;
+
     //映射一个action
     @RequestMapping("/disaster")
     public String disaster(Model model, HttpServletRequest request) {
@@ -27,34 +42,24 @@ public class DisasterController {
             return null;
 
         String prefix = request.getParameter("prefix");
-        String currentPage = "1";
 
-        if ( request.getParameter("page") != null )
-            currentPage = request.getParameter("page");
-        String type = "";
+        Map<String, double[]> geocoordMap = disasterService.getGeocoordMapByPrefix(prefix);
+        JSONObject geoJsonObject = new JSONObject();
+        geoJsonObject.putAll(geocoordMap);
 
-        try {
-            switch (prefix){
-                case "temperature":
-                    type = "温度监测";
-                    break;
-                case "taifeng":
-                    type = "台风监测";
-                    break;
-                case "pm2_5":
-                    type = "空气监测";
-                    break;
-                case "earthquake":
-                    type = "地震监测";
-                    break;
-            }
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            return null;
-        }
+        JSONArray jsonArray = disasterService.getJSONArrayByPrefix(prefix);
 
+        String type = disasterService.getTyprByPrefix(prefix);
+
+        JSONArray listArray = disasterService.getList(prefix);
+
+        List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
+
+        model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
+        model.addAttribute("list", listArray);
         model.addAttribute("prefix", prefix);
-        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("geoJsonObject", geoJsonObject);
+        model.addAttribute("jsonArray", jsonArray);
         model.addAttribute("type", type);
 
         return "disaster";
