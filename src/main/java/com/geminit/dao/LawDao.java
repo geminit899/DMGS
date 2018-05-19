@@ -19,6 +19,8 @@ public interface LawDao {
 
     List<Law> getLaws(@Param("start")int start, @Param("num")int num);
 
+    List<Law> getLawByKey(@Param("key")String key);
+
     Law getLawById(String id);
 
     Law getLatestLaw();

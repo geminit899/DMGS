@@ -30,6 +30,16 @@
         id=#{id}
     </select>
 
+    <select id="getLawByKey" resultMap="BaseMap">
+        SELECT
+        *
+        FROM law
+        WHERE
+        title LIKE CONCAT('%','${key}','%' )
+        OR
+        time LIKE CONCAT('%','${key}','%' )
+    </select>
+
     <select id="getLatestLaw" resultMap="BaseMap">
         SELECT
         *

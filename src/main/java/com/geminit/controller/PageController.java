@@ -95,10 +95,58 @@ public class PageController {
 
         List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
 
+        model.addAttribute("search", "");
         model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
         model.addAttribute("prefix", prefix);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("pageNum", pageNum);
+
+        return "page";
+    }
+
+    //映射一个action
+    @RequestMapping("/page/search")
+    public String search(Model model, HttpServletRequest request) {
+
+        if ( request.getParameter("prefix") == null || request.getParameter("search") == null )
+            return null;
+
+        String prefix = request.getParameter("prefix");
+        String search = request.getParameter("search");
+
+        try {
+            switch (prefix){
+                case "news":
+                    List<News> newsList = newsDao.getNewsByKey(search);
+
+                    model.addAttribute("type", "新闻快讯");
+                    model.addAttribute("list", newsList);
+                    break;
+                case "law":
+                    List<Law> lawList = lawDao.getLawByKey(search);
+
+                    model.addAttribute("type", "政策法规");
+                    model.addAttribute("list", lawList);
+                    break;
+                case "knowledge":
+                    List<Knowledge> knowledgeList = knowledgeDao.getKnowledgeByKey(search);
+
+                    model.addAttribute("type", "科普宣传");
+                    model.addAttribute("list", knowledgeList);
+                    break;
+            }
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return null;
+        }
+
+        List<MainNews> leftSideMainNewsList = newsDao.getMainNews();
+
+        model.addAttribute("search", search);
+        model.addAttribute("leftSideMainNewsList", leftSideMainNewsList);
+        model.addAttribute("prefix", prefix);
+        model.addAttribute("currentPage", "1");
+        model.addAttribute("pageNum", "1");
 
         return "page";
     }

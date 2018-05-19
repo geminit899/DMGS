@@ -31,6 +31,16 @@
         limit #{start},#{num}
     </select>
 
+    <select id="getNewsByKey" resultMap="BaseMap">
+        SELECT
+        *
+        FROM news
+        WHERE
+        title LIKE CONCAT('%','${key}','%' )
+        OR
+        time LIKE CONCAT('%','${key}','%' )
+    </select>
+
     <select id="getMainNews" resultMap="MainNewsMap">
         SELECT
         m.id, news_id, img, title, time, content

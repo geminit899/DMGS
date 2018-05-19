@@ -28,8 +28,8 @@
             <!-- left side -->
             <div class="col-lg-3 col-md-3 col-sm-3">
                 <div class="block input-group">
-                    <input type="text" class="form-control" placeholder="搜索内容" aria-describedby="basic-addon2">
-                    <span class="input-group-addon" id="basic-addon2">搜索</span>
+                    <input id="search" type="text" class="form-control" placeholder="搜索内容" aria-describedby="basic-addon2" value="${search}">
+                    <span class="input-group-addon" id="searchBtn">搜索</span>
                 </div>
                 <div class="block">
                     <div class="title row" style="margin: 0 0 0 0;">
@@ -147,6 +147,12 @@
             <!-- //right side -->
         </div>
         <!-- //main body -->
+
+        <script type="text/javascript">
+            $("#searchBtn").click(function(){
+                window.location.href="/page/search?search=" + $("#search").val() + "&prefix=${prefix}";
+            })
+        </script>
 
         <jsp:include page="util/footer.jsp"></jsp:include>
 

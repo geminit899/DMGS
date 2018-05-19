@@ -27,10 +27,6 @@
         <div class="row">
             <!-- left side -->
             <div class="col-lg-3 col-md-3 col-sm-3">
-                <div class="block input-group">
-                    <input type="text" class="form-control" placeholder="搜索内容" aria-describedby="basic-addon2">
-                    <span class="input-group-addon" id="basic-addon2">搜索</span>
-                </div>
                 <div class="block">
                     <div class="title row" style="margin: 0 0 0 0;">
                         <div class="col-lg-8 col-md-8 col-sm-8">

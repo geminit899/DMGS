@@ -19,6 +19,8 @@ public interface KnowledgeDao {
 
     List<Knowledge> getKnowledges(@Param("start")int start, @Param("num")int num);
 
+    List<Knowledge> getKnowledgeByKey(@Param("key")String key);
+
     Knowledge getKnowledgeById(String id);
 
     Knowledge getLatestKnowledge();

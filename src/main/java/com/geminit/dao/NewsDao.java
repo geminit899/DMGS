@@ -20,6 +20,8 @@ public interface NewsDao {
 
     List<News> getNews(@Param("start")int start, @Param("num")int num);
 
+    List<News> getNewsByKey(@Param("key")String key);
+
     List<MainNews> getMainNews();
 
     List<String> getTodayNews(String time);
