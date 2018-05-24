@@ -6,6 +6,9 @@ import com.geminit.dao.TaifengDao;
 import com.geminit.entity.City;
 import com.geminit.entity.Earthquake;
 import com.geminit.entity.Taifeng;
+import com.geminit.entity.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,6 +92,10 @@ public class ManageDisasterController {
 
             model.addAttribute("objList", earthquakes);
         }
+
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User)subject.getPrincipal();
+        model.addAttribute("user", user.getName());
 
         model.addAttribute("prefix", prefix);
         model.addAttribute("currentPage", currentPage);

@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.geminit.dao.KnowledgeDao;
 import com.geminit.dao.LawDao;
 import com.geminit.dao.NewsDao;
-import com.geminit.entity.Knowledge;
-import com.geminit.entity.Law;
-import com.geminit.entity.MainNews;
-import com.geminit.entity.News;
+import com.geminit.entity.*;
 import com.geminit.service.PageService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,6 +60,9 @@ public class ManageMainNewsController {
             return null;
         }
 
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User)subject.getPrincipal();
+        model.addAttribute("user", user.getName());
 
         model.addAttribute("list", neswList);
         model.addAttribute("todayNews", todayNews);

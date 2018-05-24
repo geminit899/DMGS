@@ -5,8 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.geminit.entity.Knowledge;
 import com.geminit.entity.Law;
 import com.geminit.entity.News;
+import com.geminit.entity.User;
 import com.geminit.service.IndexService;
 import com.geminit.service.ListenerService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,23 +85,32 @@ public class IndexController {
         String username = request.getParameter("userName");
         String password = request.getParameter("password");
 
-        boolean flag = false;
+        //主体,当前状态为没有认证的状态“未认证”
+        Subject subject = SecurityUtils.getSubject();
+        // 登录后存放进shiro token
+        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+        User user;
 
+        //登录方法（认证是否通过）
+        //使用subject调用securityManager,安全管理器调用Realm
         try {
-            flag = indexService.login(username, password);
+            //利用异常操作
+            //需要开始调用到Realm中
+            subject.login(token);
+            request.getSession().setAttribute(username,subject);
         } catch (Exception e){
             e.printStackTrace();
+            return "error";
         }
 
-        if ( flag )
-            return "success";
-        else
-            return "error";
+        return "success";
     }
 
     //映射一个action
     @RequestMapping("/logout")
     public void logout(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
         response.sendRedirect("/index");
     }
 

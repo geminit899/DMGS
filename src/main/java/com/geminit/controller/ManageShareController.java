@@ -1,7 +1,10 @@
 package com.geminit.controller;
 
 import com.geminit.dao.ResourceDao;
+import com.geminit.entity.User;
 import com.geminit.util.Util;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
@@ -32,7 +36,7 @@ public class ManageShareController {
 
     //映射一个action
     @RequestMapping("/testUpload")
-    public String testUpload(Model model, HttpServletRequest request){
+    public String testUpload(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String path = "/Users/geminit/未命名文件夹/xlsx/";
 
@@ -99,6 +103,10 @@ public class ManageShareController {
             pageNum = totalNum/10;
         else
             pageNum = totalNum/10 + 1;
+
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User)subject.getPrincipal();
+        model.addAttribute("user", user.getName());
 
         model.addAttribute("list", resourceName);
         model.addAttribute("prefix", "share");

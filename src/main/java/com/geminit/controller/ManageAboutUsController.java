@@ -1,6 +1,10 @@
 package com.geminit.controller;
 
 import com.geminit.dao.AboutUsDao;
+import com.geminit.entity.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +48,10 @@ public class ManageAboutUsController {
             e.printStackTrace();
             return null;
         }
+
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User)subject.getPrincipal();
+        model.addAttribute("user", user.getName());
 
         model.addAttribute("prefix", "aboutUs");
         model.addAttribute("lawStatement", lawStatement);

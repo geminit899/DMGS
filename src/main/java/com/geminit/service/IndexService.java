@@ -20,8 +20,6 @@ public interface IndexService {
 
     String getSalt(String userName);
 
-    boolean login(String name, String password);
-
     JSONArray getDataList(String type);
 
     List<News> getIndexNews();

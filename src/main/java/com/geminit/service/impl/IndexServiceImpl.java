@@ -75,16 +75,6 @@ public class IndexServiceImpl implements IndexService{
     }
 
     @Override
-    public boolean login(String name, String password){
-        String md5 = userDao.getMd5ByName(name);
-
-        if ( md5.equals(password) )
-            return true;
-        else
-            return false;
-    }
-
-    @Override
     public JSONArray getDataList(String type) {
         JSONArray jsonArray = new JSONArray();
         List<DataList> dataList = new ArrayList<>();
