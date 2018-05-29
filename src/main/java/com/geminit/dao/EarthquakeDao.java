@@ -30,7 +30,7 @@ public interface EarthquakeDao {
                               @Param("lat")String lat, @Param("degree")String degree, @Param("time")String time);
 
     void insertEarthquakeInfo(@Param("name")String name, @Param("lng")String lng, @Param("lat")String lat,
-                              @Param("degree")String degree, @Param("time")String time);
+                              @Param("degree")String degree, @Param("time")String time, @Param("province")int province);
 
     void deleteEarthquakeById(String id);
 

@@ -14,6 +14,7 @@ public class Earthquake {
     private String lat;
     private String degree;
     private String time;
+    private int province;
 
     public int getId() {
         return id;
@@ -61,5 +62,13 @@ public class Earthquake {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getProvince() {
+        return province;
+    }
+
+    public void setProvince(int province) {
+        this.province = province;
     }
 }

@@ -47,6 +47,7 @@ public class IndexController {
     //映射一个action
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request) {
+
         JSONArray earthquakeList = indexService.getDataList("earthquake");
         JSONArray taifengList = indexService.getDataList("taifeng");
 
@@ -89,7 +90,6 @@ public class IndexController {
         Subject subject = SecurityUtils.getSubject();
         // 登录后存放进shiro token
         UsernamePasswordToken token=new UsernamePasswordToken(username,password);
-        User user;
 
         //登录方法（认证是否通过）
         //使用subject调用securityManager,安全管理器调用Realm

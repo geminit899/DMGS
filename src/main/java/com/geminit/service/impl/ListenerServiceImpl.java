@@ -6,6 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.geminit.dao.*;
 import com.geminit.entity.*;
 import com.geminit.service.ListenerService;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,14 +21,17 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.apache.http.client.HttpClient;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.security.cert.X509Certificate;
+import java.util.*;
 
 /**
  * @author Geminit
@@ -138,9 +149,16 @@ public class ListenerServiceImpl implements ListenerService {
             String lat = tds.get(2).text();
             String degree = tds.get(0).text();
 
+            int province;
 
             try {
-                earthquakeDao.insertEarthquakeInfo(name, lng, lat, degree, time);
+                province = cityDao.getProvinceByName(name.substring(0,2));
+            } catch ( Exception e ) {
+                province = -1;
+            }
+
+            try {
+                earthquakeDao.insertEarthquakeInfo(name, lng, lat, degree, time, province);
             } catch ( Exception e ) {
                 e.printStackTrace();
                 continue;
@@ -161,19 +179,64 @@ public class ListenerServiceImpl implements ListenerService {
             return;
         }
 
-        Random rand = new Random();
 
+        HttpClient httpClient = new DefaultHttpClient();
         try {
-            for ( int i = 0; i < cities.size(); i++) {
-                int id = cities.get(i).getId();
-                String pm2_5 = Integer.toString( rand.nextInt(190) + 10 );
 
-                cityDao.setPm2_5ById(id, pm2_5);
-            }
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            X509TrustManager tm = new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(X509Certificate[] xcs, String str) {
 
-        } catch (Exception e) {
+                }
+                public void checkServerTrusted(X509Certificate[] xcs, String str) {
+
+                }
+            };
+            ctx.init(null, new TrustManager[] { tm }, null);
+            SSLSocketFactory ssf = new SSLSocketFactory(ctx);
+            ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            ClientConnectionManager ccm = httpClient.getConnectionManager();
+            SchemeRegistry registry = ccm.getSchemeRegistry();
+            registry.register(new Scheme("https", 443, ssf));
+        } catch ( Exception e ) {
             e.printStackTrace();
         }
+
+
+        for ( int i = 236; i < cities.size(); i++) {
+            int id = cities.get(i).getId();
+            String result = "";
+
+            try {
+                String name = cities.get(i).getShortname();
+                HttpResponse response = null;
+                HttpGet get = new HttpGet("https://chkj02.market.alicloudapi.com/qgtq?city=" + name);
+                get.addHeader("Authorization", "APPCODE bb1a9c2cea4848ba93d4d60811730e8c");
+                response = httpClient.execute(get);
+                HttpEntity entity = response.getEntity();
+
+                byte[] buffer = new byte[1024];
+                int len = 0;
+
+                while ((len = entity.getContent().read(buffer)) > 0) {
+                    result += new String(buffer, 0, len);
+                }
+            } catch ( Exception e ) {
+                e.printStackTrace();
+                continue;
+            }
+
+
+            JSONObject jsonObject = (JSONObject)JSONObject.parseObject(result).get("data");
+            String pm2_5 = JSONObject.parseObject(jsonObject.get("pm25").toString()).get("pm2_5").toString();
+
+            cityDao.setPm2_5ById(id, pm2_5);
+        }
+
+
 
     }
 

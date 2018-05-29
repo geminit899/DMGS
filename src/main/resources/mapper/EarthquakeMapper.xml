@@ -8,6 +8,7 @@
         <result column="lat" property="lat" jdbcType="VARCHAR" />
         <result column="degree" property="degree" jdbcType="VARCHAR" />
         <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="province" property="province" jdbcType="INTEGER" />
     </resultMap>
 
     <resultMap id="ListMap" type="com.geminit.entity.DataList">
@@ -64,9 +65,9 @@
 
     <insert id="insertEarthquakeInfo">
         INSERT INTO earthquake
-        (name, lng, lat, degree, time)
+        (name, lng, lat, degree, time, province)
         VALUES
-        (#{name}, #{lng}, #{lat}, #{degree}, #{time})
+        (#{name}, #{lng}, #{lat}, #{degree}, #{time}, #{province})
     </insert>
 
     <delete id="deleteEarthquakeById">

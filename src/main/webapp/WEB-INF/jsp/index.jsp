@@ -162,7 +162,7 @@
 
         <jsp:include page="util/footer.jsp"></jsp:include>
 
-        <script src="/js/echarts.js"></script>
+        <script src="/js/echarts.min.js"></script>
         <script src="/js/china.js"></script>
 
         <script type="text/javascript">

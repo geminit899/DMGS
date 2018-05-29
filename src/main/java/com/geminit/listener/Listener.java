@@ -1,5 +1,8 @@
 package com.geminit.listener;
 
+import com.geminit.service.ListenerService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -20,6 +23,9 @@ import java.util.TimerTask;
 @WebListener()
 public class Listener implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
+
+    @Autowired
+    ListenerService listenerService;
 
     // -------------------------------------------------------
     // ServletContextListener implementation
@@ -47,8 +53,12 @@ public class Listener implements ServletContextListener,
             public void run() {
                 // todo auto-generated method stub
                 //执行你的任务类
+                listenerService.updateEarthquakeInfo();
             }
         }, new Date(), earthquakeSchedulePeriod);
+
+
+
 
     }
 

@@ -57,8 +57,8 @@
         <div class="col-md-3 col-sm-3 col-xs-3" style="text-align: right;">
             <nav>
                 <ul class="pager" id="page-controller">
-                    <li <c:if test="${currentPage==1}"> class="disabled"</c:if>><a href="/manage?prefix=${prefix}&page=${currentPage-1}">上一页</a></li>
-                    <li <c:if test="${currentPage==pageNum}"> class="disabled"</c:if>><a href="/manage?prefix=${prefix}&page=${currentPage+1}">下一页</a></li>
+                    <li <c:if test="${currentPage==1}"> class="disabled"</c:if>><a href="/manageShare?prefix=${prefix}&page=${currentPage-1}">上一页</a></li>
+                    <li <c:if test="${currentPage==pageNum}"> class="disabled"</c:if>><a href="/manageShare?prefix=${prefix}&page=${currentPage+1}">下一页</a></li>
                 </ul>
             </nav>
         </div>

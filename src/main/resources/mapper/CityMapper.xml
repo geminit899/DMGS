@@ -26,6 +26,16 @@
         ORDER BY id ASC
     </select>
 
+    <select id="getProvinceByName" resultType="INTEGER">
+        SELECT
+        id
+        FROM city
+        WHERE
+        name LIKE CONCAT(#{name},'%')
+        AND
+        level=1
+    </select>
+
     <select id="getCityByName" resultMap="BaseMap">
         SELECT
         *

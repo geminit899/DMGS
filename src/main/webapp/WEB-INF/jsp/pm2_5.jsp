@@ -37,7 +37,7 @@
         $("#map").attr("style", "width: 100%;height:" + height + "px;");
     </script>
 
-    <script src="/js/echarts.js"></script>
+    <script src="/js/echarts.min.js"></script>
     <script src="/js/china.js"></script>
 
     <script type="text/javascript">
