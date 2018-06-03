@@ -45,9 +45,16 @@
 
         var pm2_5Data = [];
         var geoCoordMap = eval(${geoJsonObject});
+        var minP=0;
+        var maxP=0;
 
         for (var i = 0; i<eval(${jsonArray.size()}); i++) {
             pm2_5Data.push({'name':${jsonArray}[i].name, 'value': ${jsonArray}[i].value});
+            presentValue = ${jsonArray}[i].value;
+            if ( parseInt(presentValue) < minP )
+                minP = parseInt(presentValue);
+            if ( parseInt(presentValue) > maxP )
+                maxP = parseInt(presentValue);
         }
 
         var convertData = function (data) {
@@ -64,8 +71,8 @@
         option = {
             backgroundColor: '#404a59',
             visualMap: {
-                min: 0,
-                max: 200,
+                min: minP,
+                max: maxP,
                 calculable: true,
                 color: ['#d94e5d','#eac736','#50a3ba'],
                 textStyle: {
@@ -103,6 +110,8 @@
                 name: 'AQI',
                 type: 'heatmap',
                 coordinateSystem: 'geo',
+                pointSize:20,
+                BlurSize:15,
                 data: convertData(pm2_5Data)
             }]
         };

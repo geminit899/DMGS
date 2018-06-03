@@ -51,7 +51,7 @@
         var geoCoordMap = eval(${geoJsonObject});
 
         for (var i = 0; i<eval(${jsonArray.size()}); i++) {
-            data.push({'name':${jsonArray}[i].name, 'value': ${jsonArray}[i].value});
+            data.push({'name':${jsonArray}[i].name, 'value': ${jsonArray}[i].value, 'time': ${jsonArray}[i].time});
         }
 
 

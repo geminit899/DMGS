@@ -47,7 +47,6 @@ public class IndexController {
     //映射一个action
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request) {
-
         JSONArray earthquakeList = indexService.getDataList("earthquake");
         JSONArray taifengList = indexService.getDataList("taifeng");
 

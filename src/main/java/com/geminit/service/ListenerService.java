@@ -12,6 +12,8 @@ public interface ListenerService {
 
     void updatePM2_5();
 
+    void updateTaifeng();
+
     void updateEarthquakeInfo();
 
     void updateNews();

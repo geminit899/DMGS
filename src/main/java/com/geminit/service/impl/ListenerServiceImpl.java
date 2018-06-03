@@ -79,10 +79,10 @@ public class ListenerServiceImpl implements ListenerService {
             String url = "https://api.seniverse.com/v3/weather/now.json?key=24fx6zvg0mnfjfqf&location=" + location;
             StringBuilder jsonString = new StringBuilder();
             try {
-                URL oracle = new URL(url);
-                URLConnection yc = oracle.openConnection();
+                URL xinZhiTianQi = new URL(url);
+                URLConnection uc = xinZhiTianQi.openConnection();
                 BufferedReader in = new BufferedReader(new InputStreamReader(
-                        yc.getInputStream(),"utf-8"));//防止乱码
+                        uc.getInputStream(),"utf-8"));//防止乱码
                 String inputLine = null;
                 while ((inputLine = in.readLine()) != null) {
                     jsonString.append(inputLine);
@@ -105,6 +105,11 @@ public class ListenerServiceImpl implements ListenerService {
                 continue;
             }
         }
+    }
+
+    @Override
+    public void updateTaifeng(){
+
     }
 
     @Override
